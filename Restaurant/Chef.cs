@@ -13,12 +13,12 @@ namespace Restaurant
         {
             Id = id;
         }
-        public void PrepareTheMeal(Meal meal)
+        public async Task PrepareTheMeal(Meal meal)
         {
-            foreach (var item in meal.StepsToMake)
+            foreach (Step item in meal.StepsToMake)
             {
-                Console.WriteLine($"Chef is work on: {item.Name}");
-                Task.Delay(item.TimeOfStep);
+                Console.WriteLine($"Chef{Id}:");
+                await item.Proceed();
             }
         }
     }

@@ -15,5 +15,10 @@ namespace Restaurant
             Name = name;
             TimeOfStep = timeUnit;
         }
+        public async Task Proceed()
+        {
+            Console.WriteLine($"{Name}...");
+            await Task.Delay(TimeOfStep);
+        }
     }
 }

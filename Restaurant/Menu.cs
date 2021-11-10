@@ -15,9 +15,9 @@ namespace Restaurant
         }
         private List<Meal> CreateBasicMenu()
         {
-            return new List<Meal>() { new Meal("Egg with bacon", new List<Step>() { new Step("Boil the eggs", 300), new Step("Fry the becon", 500) }),
-                                      new Meal("Sandwich", new List<Step>() { new Step("Prepare bread", 200), new Step("Chop the vegetables", 600), new Step("Fold the sandwich", 150) }),
-                                      new Meal("Oragne juice", new List<Step>() { new Step("Squeze oranges", 250), new Step("Pour the juice", 100) }) };
+            return new List<Meal>() { new Meal("Egg with bacon", new List<Step>() { new Step("Boil the eggs", 3000), new Step("Fry the becon", 5000) }),
+                                      new Meal("Sandwich", new List<Step>() { new Step("Prepare bread", 2000), new Step("Chop the vegetables", 6000), new Step("Fold the sandwich", 1500) }),
+                                      new Meal("Oragne juice", new List<Step>() { new Step("Squeze oranges", 2500), new Step("Pour the juice", 1000) }) };
             
         }
         public void ShowMenu()

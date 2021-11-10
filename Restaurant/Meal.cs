@@ -22,7 +22,7 @@ namespace Restaurant
         {
             int time = 0;
             foreach (Step step in steps)
-                time = +step.TimeOfStep;
+                time += step.TimeOfStep;
             return time;
         }
     }
