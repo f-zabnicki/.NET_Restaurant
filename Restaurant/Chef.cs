@@ -10,6 +10,7 @@ namespace Restaurant
     {
         public int Id { get; set; }
         public bool Working { get; set; }
+        public event EventHandler<Meal> FinishedMealEvent;
         public Chef(int id)
         {
             Id = id;
@@ -23,6 +24,7 @@ namespace Restaurant
                 await item.Proceed();
             }
             Working = false;
+            FinishedMealEvent?.Invoke(this, meal);
             meal.Finished = true;
         }
     }

@@ -9,9 +9,20 @@ namespace Restaurant
     class Waiter
     {
         public int Id { get; set; }
+        public bool Working { get; set; }
         public Waiter(int id)
         {
             Id = id;
+            Working = false;
         }
+        public async Task Deliver(Meal m)
+        {
+            Working = true;
+            Console.WriteLine($"Waiter{Id} is delivering {m.Name} to the customer....");
+            await Task.Delay(2000);
+            Console.WriteLine("Meal delivered to customer");
+            Working = false;
+        }
+        
     }
 }

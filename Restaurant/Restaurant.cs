@@ -8,16 +8,19 @@ namespace Restaurant
 {
     class Restaurant
     {
+        public bool IsOpen { get; set; }
         public List<Client> Clients { get; set; }
         public List<Chef> Chefs { get; set; }
         public List<Waiter> Waiters { get; set; }
         public Menu Menu { get; set; }
+        public Queue<Meal> finished = new Queue<Meal> { };
         public Restaurant(int clients, int chefs, int waiters)
         {
             Clients = CreateListOfClients(clients);
             Chefs = CreateListOfChefs(chefs);
             Waiters = CreateListOfWaiters(waiters);
             Menu = new Menu();
+            IsOpen = true;
         }
         private List<Client> CreateListOfClients(int quant)
         {
@@ -77,11 +80,35 @@ namespace Restaurant
                     {
                         var order = ordersList.Dequeue();
                         tasks.Add(chef.PrepareTheMeal(order));
+                        chef.FinishedMealEvent += Chef_FinishedMealEvent;
                     }
                 }
             }
             Task.WaitAll(tasks.ToArray());
             Console.WriteLine("All meals done... Closing restaurant...");
+        }
+
+        private async Task CallWaiter()
+        {
+            foreach (Waiter waiter in Waiters)
+            {
+                if (!waiter.Working)
+                {
+                    if (finished.Count != 0)
+                    {
+                        var deliver = finished.Dequeue(); // usuwa dwa?!
+                        waiter.Deliver(deliver);
+                    }
+                }
+            }
+            if (finished.Count != 0)
+                CallWaiter();
+        }
+
+        private void Chef_FinishedMealEvent(object sender, Meal e)
+        {
+            finished.Enqueue(e);
+            CallWaiter();
         }
 
         public async Task AskForNextOrder()
