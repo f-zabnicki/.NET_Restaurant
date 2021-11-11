@@ -9,8 +9,7 @@ namespace Restaurant
         {
             var restaurant = RestauratCreator.CreateRestaurant();
             restaurant.Menu.ShowMenu();
-            restaurant.PlaceOrders();
-            await restaurant.StartTheRestaurant();
+            await restaurant.PlaceOrders();
         }
     }
 }

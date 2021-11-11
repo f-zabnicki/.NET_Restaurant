@@ -46,7 +46,7 @@ namespace Restaurant
             }
             return list;
         }
-        public void PlaceOrders()
+        public async Task PlaceOrders()
         {
             Console.WriteLine("Place your order... (client, meal, waiting time => optional (seconds))");
             var order = Console.ReadLine().Split(',');
@@ -57,12 +57,13 @@ namespace Restaurant
             }
             var client = Clients.FirstOrDefault(o => o.Id == Int32.Parse(order[0]));
             client.Order = Menu.Meals[Int32.Parse(order[1])];
-            AskForNextOrder();
+            await AskForNextOrder();
         }
 
         public async Task StartTheRestaurant()
         {
             Queue<Meal> ordersList = new Queue<Meal>{ };
+            List<Task> tasks = new List<Task> { };
             foreach (var item in Clients)
             {
                 if (item.Order != null)
@@ -75,28 +76,29 @@ namespace Restaurant
                     if (!chef.Working)
                     {
                         var order = ordersList.Dequeue();
-                        await chef.PrepareTheMeal(order);
+                        tasks.Add(chef.PrepareTheMeal(order));
                     }
                 }
             }
-            
+            Task.WaitAll(tasks.ToArray());
+            Console.WriteLine("All meals done... Closing restaurant...");
         }
 
-        public void AskForNextOrder()
+        public async Task AskForNextOrder()
         {
             Console.WriteLine("\nPlace next order?");
             var key = Console.ReadKey().KeyChar;
             switch (key)
             {
                 case 'y':
-                    PlaceOrders();
+                    await PlaceOrders();
                     break;
                 case 'n':
-                    StartTheRestaurant();
+                    await StartTheRestaurant ();
                     break;
                 default:
                     Console.WriteLine("Wrong key pressed please try again.");
-                    AskForNextOrder();
+                    await AskForNextOrder();
                     break;
             }
         }
