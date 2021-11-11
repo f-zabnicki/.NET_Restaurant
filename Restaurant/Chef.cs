@@ -9,17 +9,21 @@ namespace Restaurant
     class Chef
     {
         public int Id { get; set; }
+        public bool Working { get; set; }
         public Chef(int id)
         {
             Id = id;
         }
         public async Task PrepareTheMeal(Meal meal)
         {
+            Working = true;
             foreach (Step item in meal.StepsToMake)
             {
-                Console.WriteLine($"Chef{Id}:");
+                Console.WriteLine($"Chef{Id + 1}:");
                 await item.Proceed();
             }
+            Working = false;
+            meal.Finished = true;
         }
     }
 }

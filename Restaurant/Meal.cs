@@ -11,11 +11,13 @@ namespace Restaurant
         public string Name { get; set; }
         public int TimeToMake { get; set; }
         public List<Step> StepsToMake { get; set; }
+        public bool Finished { get; set; }
         public Meal(string name, List<Step> steps)
         {
             Name = name;
             StepsToMake = steps;
             TimeToMake = CalculateTimeToMakeMeal(steps);
+            Finished = false;
         }
 
         private int CalculateTimeToMakeMeal(List<Step> steps)

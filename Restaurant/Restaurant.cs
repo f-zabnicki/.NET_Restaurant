@@ -57,17 +57,34 @@ namespace Restaurant
             }
             var client = Clients.FirstOrDefault(o => o.Id == Int32.Parse(order[0]));
             client.Order = Menu.Meals[Int32.Parse(order[1])];
+            AskForNextOrder();
         }
 
         public async Task StartTheRestaurant()
         {
-            await Chefs[0].PrepareTheMeal(Clients[0].Order);
-            Console.WriteLine("Finish");
+            Queue<Meal> ordersList = new Queue<Meal>{ };
+            foreach (var item in Clients)
+            {
+                if (item.Order != null)
+                    ordersList.Enqueue(item.Order);
+            }
+            while (ordersList.Count != 0) 
+            {
+                foreach (var chef in Chefs)
+                {
+                    if (!chef.Working)
+                    {
+                        var order = ordersList.Dequeue();
+                        await chef.PrepareTheMeal(order);
+                    }
+                }
+            }
+            
         }
 
         public void AskForNextOrder()
         {
-            Console.WriteLine("Place next order?");
+            Console.WriteLine("\nPlace next order?");
             var key = Console.ReadKey().KeyChar;
             switch (key)
             {
